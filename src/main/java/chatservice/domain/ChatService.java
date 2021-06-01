@@ -77,6 +77,7 @@ public class ChatService {
                 if (chatMessage.getMessageStatus().equals(MessageStatus.SENT)) {
                     chatMessage.setMessageStatus(MessageStatus.READ);
                     chatMessages.add(chatMessage);
+                    chatRepository.addOrUpdateMessage(chatMessage);
                 } else {
                     allMessagesUpdated = true;
                 }
@@ -85,9 +86,7 @@ public class ChatService {
                 break;
             }
         }
-        //maybe if(!allMessagesUpdated){ update all of messages in current chatroom}
 
-        List<ChatUser> chatUsers = chatRepository.getChatRoom(chatID).orElseThrow().getUsers();
         return chatMessages;
     }
 

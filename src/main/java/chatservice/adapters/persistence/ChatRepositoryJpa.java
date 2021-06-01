@@ -38,9 +38,15 @@ public class ChatRepositoryJpa implements ChatRepository {
 
         ChatUserOrm sender = chatUserRepository.findByExternalId(chatMessage.getSenderId()).orElseThrow();
         Set<ChatUserOrm> recipients = new HashSet<>();
-        for(var chatUserExternalId : chatMessage.getRecipientsIds()){
-            recipients.add(chatUserRepository.findByExternalId(chatUserExternalId).orElseThrow());
+
+        if(null != chatMessage.getId()){
+            recipients = chatMessagesRepository.findById(chatMessage.getId()).orElseThrow().getRecipients();
+        } else if (null != chatMessage.getRecipientsIds()) {
+            for(var chatUserExternalId : chatMessage.getRecipientsIds()){
+                recipients.add(chatUserRepository.findByExternalId(chatUserExternalId).orElseThrow());
+            }
         }
+
         ChatRoomOrm chatRoomOrm = chatRoomRepository.findById(chatMessage.getChatId()).orElseThrow();
 
         ChatMessageOrm chatMessageOrm = ChatMessageOrm.builder()
