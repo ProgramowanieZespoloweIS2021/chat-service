@@ -66,10 +66,15 @@ public class ChatRepositoryJpa implements ChatRepository {
     @Override
     public ChatRoom addOrUpdateChatRoom(ChatRoom chatRoom) {
 
+
         Set<ChatUserOrm> chatUsers = new HashSet<>();
         for(var chatUser : chatRoom.getUsers()){
             chatUsers.add(chatUserRepository.findByExternalId(chatUser.getId()).orElseThrow());
         }
+
+        var existingChatRoom = chatRoomRepository.findByUsersExternalIdIn(new ArrayList<>(chatUsers), chatUsers.size());
+        existingChatRoom.ifPresent(chatRoomOrm -> chatRoom.setId(chatRoomOrm.getId()));
+
 
         ChatRoomOrm updatedChatRoomOrm = ChatRoomOrm.builder()
                 .id(chatRoom.getId())

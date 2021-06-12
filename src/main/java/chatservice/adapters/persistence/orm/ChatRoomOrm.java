@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -23,7 +24,7 @@ public class ChatRoomOrm {
     private Long id;
 
     @ManyToMany(targetEntity = ChatUserOrm.class, fetch = FetchType.EAGER)
-    private Set<ChatUserOrm> users;
+    private Set<ChatUserOrm> users = new HashSet<>();
 
     @NotNull
     private Date lastActivity;
