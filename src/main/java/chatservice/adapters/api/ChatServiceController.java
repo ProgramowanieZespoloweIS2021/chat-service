@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
 public class ChatServiceController {
 
     SimpMessagingTemplate simpMessagingTemplate;
